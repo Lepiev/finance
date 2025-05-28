@@ -66,7 +66,3 @@ def api_request(stock, data_from, data_to, board = "TQBR"):
     full = full.set_index("begin").sort_index()
     return full
 
-df = api_request('SBER', '2020-01-01', '2020-05-01')
-df.to_excel('test.xlsx')
-    
-
