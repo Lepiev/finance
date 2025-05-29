@@ -66,3 +66,13 @@ def api_request(stock, data_from, data_to, board = "TQBR"):
     full = full.set_index("begin").sort_index()
     return full
 
+def get_number(ticker: str) -> int:
+    url = (f"https://iss.moex.com/iss/engines/stock/markets/shares/"
+           f"securities/{ticker}.json?iss.only=securities")
+    j = requests.get(url, timeout=10).json()
+    cols, row = j["securities"]["columns"], j["securities"]["data"][0]
+    info = dict(zip(cols, row))
+    for k in ("issue_size", "issuesize", "ISSUESIZE"):
+        if k in info and info[k]:
+            return int(info[k])
+    raise KeyError(f"{ticker}: поле issue_size не найдено")
